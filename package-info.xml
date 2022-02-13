@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE package-info SYSTEM "http://www.simplemachines.org/xml/package-info">
+<package-info xmlns="http://www.simplemachines.org/xml/package-info" xmlns:smf="http://www.simplemachines.org/">
+	<id>Bugo:MergeDoublePosts</id>
+	<name>Merge Double Posts</name>
+	<version>0.4</version>
+	<type>modification</type>
+
+	<install for="2.1.*">
+		<require-dir name="Sources" destination="$boarddir" />
+		<require-dir name="Themes" destination="$boarddir" />
+		<hook hook="integrate_pre_load" function="MergeDoublePosts::hooks#" file="$sourcedir/Class-MergeDoublePosts.php" />
+		<redirect url="?action=admin;area=modsettings;sa=mdp" timeout="1000" />
+	</install>
+
+	<uninstall for="2.1.*">
+		<hook hook="integrate_pre_load" function="MergeDoublePosts::hooks#" file="$sourcedir/Class-MergeDoublePosts.php" reverse="true" />
+		<remove-file name="$sourcedir/Class-MergeDoublePosts.php" />
+		<remove-file name="$themedir/MergeDoublePosts.template.php" />
+		<remove-dir name="$languagedir/MergeDoublePosts" />
+	</uninstall>
+
+</package-info>
