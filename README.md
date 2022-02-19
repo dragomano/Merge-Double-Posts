@@ -4,7 +4,7 @@
 ![Hooks only: Yes](https://img.shields.io/badge/Hooks%20only-YES-blue)
 
 * **Tested on:** PHP 7.4.27
-* **Languages:** English, Russian
+* **Languages:** English, Russian, Turkish
 
 ## Description
 Simple mod to prevent double posting from users
