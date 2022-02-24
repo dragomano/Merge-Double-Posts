@@ -9,7 +9,7 @@
  * @copyright 2021-2022 Bugo
  * @license https://opensource.org/licenses/MIT MIT
  *
- * @version 0.4
+ * @version 0.4.1
  */
 
 if (!defined('SMF'))
@@ -35,6 +35,12 @@ final class MergeDoublePosts
 		$context['mdp_group_enabled'] = empty($modSettings['mdp_group_enabled']) ? [] : json_decode($modSettings['mdp_group_enabled'], true);
 
 		$intersect_groups = array_intersect(array_keys($context['mdp_group_enabled']), $user_info['groups']);
+
+		if ($user_info['is_admin'] && !in_array(1, $intersect_groups))
+			$intersect_groups = [];
+
+		if (!$user_info['is_admin'] && allowedTo('moderate_board') && !in_array(2, $intersect_groups))
+			$intersect_groups = [];
 
 		if (empty($intersect_groups))
 			return;
