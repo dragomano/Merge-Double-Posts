@@ -3,8 +3,8 @@
 ![License](https://img.shields.io/github/license/dragomano/merge-double-posts)
 ![Hooks only: Yes](https://img.shields.io/badge/Hooks%20only-YES-blue)
 
-* **Tested on:** PHP 7.4.27
-* **Languages:** English, Russian, Turkish
+* **Tested on:** PHP 8.0.24
+* **Languages:** English, Russian, Turkish, Italian
 
 ## Description
 Simple mod to prevent double posting from users
