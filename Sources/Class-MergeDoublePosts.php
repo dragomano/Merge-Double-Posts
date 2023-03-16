@@ -6,10 +6,10 @@
  * @package Merge Double Posts
  * @link https://dragomano.ru/mods/merge-double-posts
  * @author Bugo <bugo@dragomano.ru>
- * @copyright 2021-2022 Bugo
+ * @copyright 2021-2023 Bugo
  * @license https://opensource.org/licenses/MIT MIT
  *
- * @version 0.4.1
+ * @version 0.4.2
  */
 
 if (!defined('SMF'))
@@ -46,7 +46,7 @@ final class MergeDoublePosts
 			return;
 
 		$request = $smcFunc['db_query']('', '
-			SELECT id_msg, id_member, body, poster_time, approved, likes
+			SELECT id_msg, id_member, subject, body, poster_time, approved, likes
 			FROM {db_prefix}messages
 			WHERE id_topic = {int:topic}
 			ORDER BY id_msg DESC
@@ -56,12 +56,12 @@ final class MergeDoublePosts
 			)
 		);
 
-		list ($id_last_msg, $id_member, $last_body, $poster_time, $approved, $likes) = $smcFunc['db_fetch_row']($request);
+		list ($id_last_msg, $id_member, $last_subject, $last_body, $poster_time, $approved, $likes) = $smcFunc['db_fetch_row']($request);
 
 		$smcFunc['db_free_result']($request);
 
 		// Hook for modders
-		call_integration_hook('integrate_mdp_create_post', array(&$id_last_msg, &$id_member, &$last_body, $poster_time, $approved, $likes));
+		call_integration_hook('integrate_mdp_create_post', array(&$id_last_msg, &$id_member, &$last_subject, &$last_body, $poster_time, $approved, $likes));
 
 		if (empty($id_last_msg) || empty($id_member))
 			return;
@@ -106,7 +106,7 @@ final class MergeDoublePosts
 		}
 
 		$msgOptions['id'] = $id_last_msg;
-		$msgOptions['subject'] = str_replace($txt['response_prefix'] . $txt['response_prefix'], $txt['response_prefix'], $msgOptions['subject']);
+		$msgOptions['subject'] = str_replace($txt['response_prefix'] . $txt['response_prefix'], $txt['response_prefix'], $last_subject);
 		$msgOptions['body'] = $last_body . (!empty($modSettings['mdp_template']) ? "\n\n" . strtr($modSettings['mdp_template'], array(
 			'{time}' => '[time]' . time() . '[/time]'
 		)) : '') . "\n" . $msgOptions['body'];
@@ -181,7 +181,6 @@ final class MergeDoublePosts
 
 		$context['page_title'] = $context['settings_title'] = $txt['mdp_title'];
 		$context['post_url'] = $scripturl . '?action=admin;area=modsettings;save;sa=mdp';
-		$context[$context['admin_menu_name']]['tab_data']['tabs']['mdp'] = array('description' => $txt['mdp_desc']);
 
 		if (!isset($modSettings['mdp_template']))
 			updateSettings(array('mdp_template' => '[size=1][i]{time}[/i][/size]'));
@@ -202,6 +201,8 @@ final class MergeDoublePosts
 
 		if ($return_config)
 			return $config_vars;
+
+		$context[$context['admin_menu_name']]['tab_data']['description'] = $txt['mdp_desc'];
 
 		// Saving?
 		if (isset($_GET['save'])) {

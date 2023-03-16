@@ -3,7 +3,7 @@
 <package-info xmlns="http://www.simplemachines.org/xml/package-info" xmlns:smf="http://www.simplemachines.org/">
 	<id>Bugo:MergeDoublePosts</id>
 	<name>Merge Double Posts</name>
-	<version>0.4.1</version>
+	<version>0.4.2</version>
 	<type>modification</type>
 
 	<install for="2.1.*">
