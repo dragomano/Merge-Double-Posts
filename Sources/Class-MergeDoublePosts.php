@@ -6,10 +6,10 @@
  * @package Merge Double Posts
  * @link https://dragomano.ru/mods/merge-double-posts
  * @author Bugo <bugo@dragomano.ru>
- * @copyright 2021-2023 Bugo
+ * @copyright 2021-2024 Bugo
  * @license https://opensource.org/licenses/MIT MIT
  *
- * @version 0.4.2
+ * @version 0.5
  */
 
 if (!defined('SMF'))
@@ -17,7 +17,7 @@ if (!defined('SMF'))
 
 final class MergeDoublePosts
 {
-	public function hooks()
+	public function hooks(): void
 	{
 		add_integration_function('integrate_create_post', __CLASS__ . '::createPost#', false, __FILE__);
 		add_integration_function('integrate_admin_areas', __CLASS__ . '::adminAreas#', false, __FILE__);
@@ -25,7 +25,7 @@ final class MergeDoublePosts
 		add_integration_function('integrate_modify_modifications', __CLASS__ . '::modifications#', false, __FILE__);
 	}
 
-	public function createPost(array &$msgOptions, array &$topicOptions, array &$posterOptions)
+	public function createPost(array &$msgOptions, array &$topicOptions, array &$posterOptions): void
 	{
 		global $modSettings, $context, $user_info, $smcFunc, $sourcedir, $txt;
 
@@ -56,7 +56,7 @@ final class MergeDoublePosts
 			)
 		);
 
-		list ($id_last_msg, $id_member, $last_subject, $last_body, $poster_time, $approved, $likes) = $smcFunc['db_fetch_row']($request);
+		[$id_last_msg, $id_member, $last_subject, $last_body, $poster_time, $approved, $likes] = $smcFunc['db_fetch_row']($request);
 
 		$smcFunc['db_free_result']($request);
 
@@ -167,7 +167,7 @@ final class MergeDoublePosts
 		redirectexit('msg=' . $id_last_msg);
 	}
 
-	public function adminAreas(array &$admin_areas)
+	public function adminAreas(array &$admin_areas): void
 	{
 		global $txt;
 
@@ -176,12 +176,12 @@ final class MergeDoublePosts
 		$admin_areas['config']['areas']['modsettings']['subsections']['mdp'] = array($txt['mdp_title']);
 	}
 
-	public function adminSearch(array &$language_files, array &$include_files, array &$settings_search)
+	public function adminSearch(array &$language_files, array &$include_files, array &$settings_search): void
 	{
 		$settings_search[] = array(array($this, 'settings'), 'area=modsettings;sa=mdp');
 	}
 
-	public function modifications(array &$subActions)
+	public function modifications(array &$subActions): void
 	{
 		$subActions['mdp'] = array($this, 'settings');
 	}
@@ -250,7 +250,7 @@ final class MergeDoublePosts
 		prepareDBSettingContext($config_vars);
 	}
 
-	private function prepareMembergroups()
+	private function prepareMembergroups(): void
 	{
 		global $smcFunc, $modSettings, $context;
 
