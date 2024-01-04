@@ -1,0 +1,6 @@
+**/.idea/
+**/.vscode/
+**/vendor/
+Themes/default/languages/MergeDoublePosts/*
+!Themes/default/languages/MergeDoublePosts/index.php
+!Themes/default/languages/MergeDoublePosts/.english.php
