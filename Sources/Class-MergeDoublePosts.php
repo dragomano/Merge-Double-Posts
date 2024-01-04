@@ -125,6 +125,23 @@ final class MergeDoublePosts
 
 		modifyPost($msgOptions, $topicOptions, $posterOptions);
 
+		// Update id_msg for new attachments
+		if (!empty($_SESSION['already_attached'])) {
+			$smcFunc['db_query']('', '
+				UPDATE {db_prefix}attachments
+				SET id_msg = {int:id_msg}
+				WHERE id_msg = 0
+					AND id_member = 0
+					AND id_attach IN ({array_int:list})',
+				array(
+					'list'   => $_SESSION['already_attached'],
+					'id_msg' => $msgOptions['id'],
+				)
+			);
+
+			unset($_SESSION['already_attached']);
+		}
+
 		// Notify about new reply
 		if (!empty($msgOptions['send_notifications']) && !empty($msgOptions['approved'])) {
 			$smcFunc['db_insert']('',
